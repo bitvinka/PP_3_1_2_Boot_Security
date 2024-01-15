@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <style>
+        .wrap {
+            width: 20em;
+            margin: 5em auto;
+            text-align: center;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        input[type="text"] {
+            font-family: inherit; /* 1 */
+            font-size: inherit; /* 1 */
+            line-height: inherit; /* 1 */
+            margin: 0; /* 2 */
+        }
+        /* установим отступ 1rem от нижнего края элемента */
+        .text-field {
+            margin-bottom: 1rem;
+        }
+        /* стили для label */
+        .text-field__label {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        /* стили для input */
+        .text-field__input {
+            display: block;
+            width: 100%;
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #bdbdbd;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .button1{
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            padding: .5em 2em;
+            outline: none;
+            border-width: 2px 0;
+            border-style: solid none;
+            border-color: #FDBE33 #000 #D77206;
+            border-radius: 6px;
+            background: linear-gradient(#F3AE0F, #E38916) #E38916;
+            transition: 0.2s;
+        }
+        a.button1:hover { background: linear-gradient(#f5ae00, #f59500) #f5ae00; }
+        a.button1:active { background: linear-gradient(#f59500, #f5ae00) #f59500; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <form name="f" method="POST" action="/process_login">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <div class="text-field">
+        <label class="text-field__label" for="username">Введите логин (email):</label>
+        <input class="text-field__input" type="text" name="username" id="username">
+        </div>
+
+        <div class="text-field">
+        <label class="text-field__label">Введите пароль:</label>
+        <input class="text-field__input"type="password" name="password" id="password">
+        </div>
+
+        <input class="button1" type="submit" value="ВОЙТИ">
+
+        <div th:if="${param.error}" style="color: red">
+            Неправильные имя или пароль
+        </div>
+    </form>
+</div>
+</body>
+</html>
