@@ -105,7 +105,7 @@
     </tfoot>
     <tbody>
     <tr th:each ="user : ${users}">
-        <td ><a th:href="@{/user(id=${user.getId()})}" th:text="${user.getId()}"></a></td>
+        <td ><a th:href="@{/admin/showUser(id=${user.getId()})}" th:text="${user.getId()}"></a></td>
         <td th:text="${user.getFirstName()}"></td>
         <td th:text="${user.getLastName()}"></td>
         <td th:text="${user.getEmail()}"></td>

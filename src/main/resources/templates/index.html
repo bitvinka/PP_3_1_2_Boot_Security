@@ -31,11 +31,12 @@
 <div sec:authorize="isAuthenticated()">
 <h1  th:text="'Добро пожаловать ' + ${user} + '!'"></h1>
 </div>
-
+    <div sec:authorize="!isAuthenticated()">
 <p><a class="button1" th:href="@{/login}">Войти в кабинет</a></p>
 
-<p><a class="button1" th:href="@{/registration}">Зарегистрироваться</a></p>
 
+<p><a class="button1" th:href="@{/registration}">Зарегистрироваться</a></p>
+    </div>
 <!--если используем токены _csrf, то разлогинится можно только с помощью POST запроса (с помощью формы)-->
 <div sec:authorize="isAuthenticated()">
 <form th:action="@{/logout}" th:method="POST">

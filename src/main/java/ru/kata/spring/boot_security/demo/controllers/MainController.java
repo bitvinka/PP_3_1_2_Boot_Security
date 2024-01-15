@@ -32,6 +32,8 @@ public class MainController {
         this.roleDao = roleDao;
     }
 
+
+
     @GetMapping("/")
     public String main(Model model, Principal principal) {
         if(Optional.ofNullable(principal).isPresent()) {

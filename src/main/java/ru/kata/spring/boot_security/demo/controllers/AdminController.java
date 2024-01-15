@@ -31,13 +31,16 @@ public class AdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping()
+    @GetMapping("")
     public String allUsers(Model model) {
-
-
         model.addAttribute("users", userService.getUsers());
-
         return "admin/adminMain";
+    }
+
+    @GetMapping("/showUser")
+    public String showUser(@RequestParam(value = "id") Long id, Model model){
+       model.addAttribute("user", userService.getUserById(id).get());
+        return "admin/userAdmin";
     }
 
     @GetMapping("/user/new")
