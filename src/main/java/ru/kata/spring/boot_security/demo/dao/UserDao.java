@@ -11,7 +11,7 @@ public interface UserDao {
     Optional<User> getUserById(Long id);
 
     void removeUser(Long id);
-    void updateUser(User user, Long id);
+    void updateUser(User user);
     Optional<User> findByEmail(String email);
     boolean addUser(User user);
 

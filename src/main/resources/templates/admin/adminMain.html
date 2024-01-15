@@ -7,6 +7,9 @@
         h1 {
             text-align:center;
         }
+        ul {
+            list-style-type: none;
+        }
         a.button {
             display: inline-block;
             font-family: arial,sans-serif;
@@ -109,8 +112,10 @@
         <td th:text="${user.getFirstName()}"></td>
         <td th:text="${user.getLastName()}"></td>
         <td th:text="${user.getEmail()}"></td>
-        <td th:each ="role : ${user.getRoles()}">
-            <span th:text="${role.getName()}"></span>
+        <td >
+            <ul th:each ="role : ${user.getRoles()}" >
+                <li th:text="${role.getName()}"></li>
+            </ul>
         </td>
         <td><a class="button" th:href="@{/admin/user/edit(id=${user.getId()})}">Редактирование</a>
             <a class="button" th:href="@{/admin/user/delete(id=${user.getId()})}"> Удаление</a></td>

@@ -7,12 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -69,7 +71,7 @@ public class AdminController {
     }
 
     @PostMapping("/user/edit")
-    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam("id") Long id) {
+    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @ModelAttribute("roles") Set<Role> roles) {
         Optional<User> optUser = userService.getUserById(user.getId());
         if (optUser.isPresent() && (!user.getEmail().equals(optUser.get().getEmail()))) {
             userValidator.validate(user, bindingResult);
@@ -80,8 +82,13 @@ public class AdminController {
         if (optUser.isPresent() && (!user.getPassword().equals(optUser.get().getPassword()))) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        user.setRoles(user.getRoles());
-        userService.updateUser(user, id);
+        for (Role r: roles){
+            System.out.println(r);
+            System.out.println("РОЛЬ");
+        }
+
+        user.setRoles(roles);
+        userService.updateUser(user);
         return REDIRECT_ADMIN;
     }
 

@@ -40,19 +40,22 @@
     <br>
     <br>
     <label for="password">Введите пароль: </label>
-    <input type="email" th:field="*{password}" id="password">
-    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    <input type="text" th:field="*{password}" id="password">
     <br>
     <p>
         <label>Roles:
+            <th:block th:each="role : ${roles}" th:field="*{roles}">
             <input type="checkbox" name="roles"
-                   th:each="role : ${roles}"
                    th:text="${role.name}"
                    th:value="${role.id}"
-                   th:field="*{roles}"
             >
+            </th:block>
         </label>
     </p>
+<!--    <select th:field="*{roles}">-->
+<!--        <option value="">Выбор ролей</option>-->
+<!--        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>-->
+<!--    </select>-->
     <br>
     <br>
     <input class="button1" type="submit" value="Редактировать">

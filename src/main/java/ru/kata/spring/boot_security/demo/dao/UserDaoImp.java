@@ -38,13 +38,7 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public void updateUser(User userUp, Long id) {
-        User user = em.find(User.class, id);
-        user.setFirstName(userUp.getFirstName());
-        user.setLastName(userUp.getLastName());
-        user.setEmail(userUp.getEmail());
-        user.setPassword(userUp.getPassword());
-        user.setRoles(userUp.getRoles());
+    public void updateUser(User user) {
         em.merge(user);
 
     }
