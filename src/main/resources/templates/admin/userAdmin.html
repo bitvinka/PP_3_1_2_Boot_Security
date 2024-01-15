@@ -1,22 +1,47 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<style>
+
+    .button1{
+        display: inline-block;
+        color: white;
+        text-decoration: none;
+        padding: .5em 2em;
+        outline: none;
+        border-width: 2px 0;
+        border-style: solid none;
+        border-color: #FDBE33 #000 #D77206;
+        border-radius: 6px;
+        background: linear-gradient(#F3AE0F, #E38916) #E38916;
+        transition: 0.2s;
+    }
+    a.button1:hover { background: linear-gradient(#f5ae00, #f59500) #f5ae00; }
+    a.button1:active { background: linear-gradient(#f59500, #f5ae00) #f59500; }
+
+</style>
 <head>
     <meta charset="UTF-8">
     <title>Информация о пользователе</title>
 </head>
 <body>
+<div class="wrap">
+<a class="button1" href="/">На главную страницу</a>
 
-<a href="/">На главную страницу</a>
 <h1>Информация о пользователе</h1>
-<div>
+    <hr>
+    <br>
+<div class="info">
     <p th:text="'Пользователь ID ' + ${user.getId()}"></p>
     <p th:text="'Имя: ' + ${user.getFirstName()}"></p>
     <p th:text="'Фамилия: ' + ${user.getLastName()}"></p>
     <p th:text="'Email: ' + ${user.getEmail()}"></p>
+    <p th:text="'Пароль: ' + ${user.getPassword()}"></p>
+    <ul th:each ="role : ${user.getRoles()}"> Роли:
+        <li th:text="${role.getName()}"></li>
+    </ul>
 
-    <hr>
-
-    <br>
+    <p><a class="button1" th:href="@{/admin}">Список пользователей</a></p>
+</div>
 </div>
 </body>
 </html>
