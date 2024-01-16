@@ -25,6 +25,14 @@ public class RoleDaoImpl implements RoleDao{
                 .stream()
                 .findFirst();
     }
+    @Override
+    public Optional<Role> getRoleById(Long id) {
+        return em.createQuery("select u from Role u where u.id =:id", Role.class)
+                .setParameter("id", id)
+                .getResultList()
+                .stream()
+                .findFirst();
+    }
 
     @Override
     public List<Role> getRoles() {

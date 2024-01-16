@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +15,10 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin/user")
@@ -65,12 +70,13 @@ public class AdminController {
     public String editUser(@RequestParam(value = "id") Long id, Model model) {
         Optional<User> optUser = userService.getUserById(id);
         optUser.ifPresent(user -> model.addAttribute("editUser", user));
+
         model.addAttribute("roles", roleService.getRoles());
         return "admin/editUserForm";
     }
 
     @PostMapping("/edit")
-    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "id") Long id) {
+    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "id") Long id, @RequestParam("roles") List<Role> checked) {
         Optional<User> optUser = userService.getUserById(user.getId());
         if (optUser.isPresent() && (!user.getEmail().equals(optUser.get().getEmail()))) {
             userValidator.validate(user, bindingResult);
@@ -82,13 +88,10 @@ public class AdminController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        System.out.println("-------");
-        for (Role r: user.getRoles()){
-            System.out.println(r.getName());
-            System.out.println(r.getAuthority());
-            System.out.println(r.getId());
-            System.out.println("ЮЗЕР-РОЛЬ");
+        for (Role role : checked) {
+           user.getRoles().add(role);
         }
+
         userService.updateUser(user);
         return REDIRECT_ADMIN;
     }
