@@ -86,7 +86,7 @@
 <body>
 <h1>Панель администратора</h1>
 <hr>
-<a class="button1" href="/">На главную </a>
+<a class="button1" href="/index">На главную </a>
 <table class="table">
     <caption>
         Список пользователей
@@ -108,7 +108,7 @@
     </tfoot>
     <tbody>
     <tr th:each ="user : ${users}">
-        <td ><a th:href="@{/admin/showUser(id=${user.getId()})}" th:text="${user.getId()}"></a></td>
+        <td ><a th:href="@{/admin/user/showUser(id=${user.getId()})}" th:text="${user.getId()}"></a></td>
         <td th:text="${user.getFirstName()}"></td>
         <td th:text="${user.getLastName()}"></td>
         <td th:text="${user.getEmail()}"></td>

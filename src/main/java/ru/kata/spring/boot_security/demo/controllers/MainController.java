@@ -7,34 +7,27 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.kata.spring.boot_security.demo.dao.RoleDao;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class MainController {
-    private UserService userService;
+    private final UserService userService;
     private final UserValidator userValidator;
-    private final RoleDao roleDao;
     private static final String REDIRECT = "redirect:/";
 
     @Autowired
-    public MainController(UserService userService, UserValidator userValidator, RoleDao roleDao) {
+    public MainController(UserService userService, UserValidator userValidator) {
         this.userService = userService;
         this.userValidator = userValidator;
-        this.roleDao = roleDao;
     }
 
-
-
-    @GetMapping("/")
+    @GetMapping("/index")
     public String main(Model model, Principal principal) {
         if(Optional.ofNullable(principal).isPresent()) {
         model.addAttribute("user", userService.findByEmail(principal.getName()).get().getFirstName());
@@ -54,7 +47,6 @@ public class MainController {
         if(bindingResult.hasErrors()) {
             return "registration";
         }
-
         userService.addUser(user);
         return REDIRECT;
     }

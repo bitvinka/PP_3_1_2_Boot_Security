@@ -27,43 +27,6 @@
 </head>
 <body>
 <h1>Редактирование пользователя</h1>
-<!--<form th:method="POST" th:action="@{/admin/user/edit(id=${editUser.getId()})}" th:object="${editUser}">-->
-<!--    <label for="firstName">Введите фамилию: </label>-->
-<!--    <input type="text" th:field="*{firstName}" id="firstName">-->
-<!--    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>-->
-<!--    <br>-->
-<!--    <br>-->
-<!--    <label for="lastName">Введите имя: </label>-->
-<!--    <input type="text" th:field="*{lastName}" id="lastName">-->
-<!--    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>-->
-<!--    <br>-->
-<!--    <br>-->
-<!--    <label for="email">Введите почту: </label>-->
-<!--    <input type="email" th:field="*{email}" id="email">-->
-<!--    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>-->
-<!--    <br>-->
-<!--    <br>-->
-<!--    <label for="password">Введите пароль: </label>-->
-<!--    <input type="text" th:field="*{password}" id="password">-->
-<!--    <br>-->
-<!--    <p>-->
-<!--        <label>Roles:-->
-<!--            <th:block th:each="role : ${roles}" th:field="*{roles}">-->
-<!--            <input type="checkbox" name="roles"-->
-<!--                   th:text="${role.name}"-->
-<!--                   th:value="${role.id}"-->
-<!--            >-->
-<!--            </th:block>-->
-<!--        </label>-->
-<!--    </p>-->
-<!--&lt;!&ndash;    <select th:field="*{roles}">&ndash;&gt;-->
-<!--&lt;!&ndash;        <option value="">Выбор ролей</option>&ndash;&gt;-->
-<!--&lt;!&ndash;        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>&ndash;&gt;-->
-<!--&lt;!&ndash;    </select>&ndash;&gt;-->
-<!--    <br>-->
-<!--    <br>-->
-<!--    <input class="button1" type="submit" value="Редактировать">-->
-<!--</form>-->
 <br>
 <form th:method="POST" th:action="@{/admin/user/edit(id=${editUser.getId()})}" th:object="${editUser}" class="needs-validation" novalidate>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -108,6 +71,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-<a class="button1" href="/">На Главную</a>
+<a class="button1" href="/index">На Главную</a>
 </body>
 </html>

@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
@@ -17,13 +16,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserServiceImp implements UserService {
     private final UserDao userDao;
-    private final RoleDao roleDao;
-
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImp(UserDao userDao, RoleDao roleDao, @Lazy PasswordEncoder passwordEncoder) {
+    public UserServiceImp(UserDao userDao,  @Lazy PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
-        this.roleDao = roleDao;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -32,10 +28,7 @@ public class UserServiceImp implements UserService {
     @Override
     public boolean addUser(User user) {
         if (!userDao.getUsers().isEmpty()) {
-            user.setRoles(Collections.singleton(roleDao.getRoleByName("ROLE_USER").orElse(new Role("ROLE_USER"))));
-        } else {
-            user.setRoles(Collections.singleton(new Role("ROLE_ADMIN")));
-        }
+        user.setRoles(Collections.singleton(new Role("ROLE_USER")));}
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.addUser(user);
         return true;

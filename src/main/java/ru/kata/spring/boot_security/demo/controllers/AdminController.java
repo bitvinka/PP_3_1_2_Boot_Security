@@ -6,29 +6,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/user")
 public class AdminController {
     private final UserService userService;
-    private final RoleDao roleDao;
+    private final RoleService roleService;
     private final UserValidator userValidator;
     private final PasswordEncoder passwordEncoder;
     private static final String REDIRECT_ADMIN = "redirect:/admin";
 
     @Autowired
-    public AdminController(UserService userService, RoleDao roleDao, UserValidator userValidator, PasswordEncoder passwordEncoder) {
+    public AdminController(UserService userService, RoleService roleService, UserValidator userValidator, PasswordEncoder passwordEncoder) {
         this.userService = userService;
-        this.roleDao = roleDao;
+        this.roleService = roleService;
         this.userValidator = userValidator;
         this.passwordEncoder = passwordEncoder;
     }
@@ -45,13 +44,13 @@ public class AdminController {
         return "admin/userAdmin";
     }
 
-    @GetMapping("/user/new")
+    @GetMapping("/new")
     public String addUser(Model model) {
         model.addAttribute("user", new User());
         return "admin/newUserForm";
     }
 
-    @PostMapping("/user/new")
+    @PostMapping("/new")
     public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -62,15 +61,15 @@ public class AdminController {
     }
 
 
-    @GetMapping("/user/edit")
+    @GetMapping("/edit")
     public String editUser(@RequestParam(value = "id") Long id, Model model) {
         Optional<User> optUser = userService.getUserById(id);
         optUser.ifPresent(user -> model.addAttribute("editUser", user));
-        model.addAttribute("roles", roleDao.getRoles());
+        model.addAttribute("roles", roleService.getRoles());
         return "admin/editUserForm";
     }
 
-    @PostMapping("/user/edit")
+    @PostMapping("/edit")
     public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "id") Long id) {
         Optional<User> optUser = userService.getUserById(user.getId());
         if (optUser.isPresent() && (!user.getEmail().equals(optUser.get().getEmail()))) {
@@ -90,12 +89,11 @@ public class AdminController {
             System.out.println(r.getId());
             System.out.println("ЮЗЕР-РОЛЬ");
         }
-
         userService.updateUser(user);
         return REDIRECT_ADMIN;
     }
 
-    @GetMapping("/user/delete")
+    @GetMapping("/delete")
     public String deleteUser(@RequestParam(value = "id") Long id) {
         userService.removeUser(id);
         return REDIRECT_ADMIN;
