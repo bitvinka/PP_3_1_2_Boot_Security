@@ -71,7 +71,7 @@ public class AdminController {
     }
 
     @PostMapping("/user/edit")
-    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @ModelAttribute("roles") Set<Role> roles) {
+    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "id") Long id) {
         Optional<User> optUser = userService.getUserById(user.getId());
         if (optUser.isPresent() && (!user.getEmail().equals(optUser.get().getEmail()))) {
             userValidator.validate(user, bindingResult);
@@ -82,12 +82,15 @@ public class AdminController {
         if (optUser.isPresent() && (!user.getPassword().equals(optUser.get().getPassword()))) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        for (Role r: roles){
-            System.out.println(r);
-            System.out.println("РОЛЬ");
+
+        System.out.println("-------");
+        for (Role r: user.getRoles()){
+            System.out.println(r.getName());
+            System.out.println(r.getAuthority());
+            System.out.println(r.getId());
+            System.out.println("ЮЗЕР-РОЛЬ");
         }
 
-        user.setRoles(roles);
         userService.updateUser(user);
         return REDIRECT_ADMIN;
     }
