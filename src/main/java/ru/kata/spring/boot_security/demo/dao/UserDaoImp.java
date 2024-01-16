@@ -27,8 +27,11 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable(em.find(User.class, id));
-
+        return em.createQuery("select u from users u JOIN FETCH u.roles where u.id =:userId", User.class)
+                .setParameter("userId", id)
+                .getResultList()
+                .stream()
+                .findFirst();
     }
 
     @Override
@@ -45,7 +48,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return em.createQuery("select u from users u where u.email =:userEmail", User.class)
+        return em.createQuery("select u from users u JOIN FETCH u.roles where u.email =:userEmail", User.class)
                 .setParameter("userEmail", email)
                 .getResultList()
                 .stream()

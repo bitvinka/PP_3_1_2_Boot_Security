@@ -1,8 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +13,7 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -27,7 +24,7 @@ public class AdminController {
     private final RoleService roleService;
     private final UserValidator userValidator;
     private final PasswordEncoder passwordEncoder;
-    private static final String REDIRECT_ADMIN = "redirect:/admin";
+    private static final String REDIRECT_ADMIN = "redirect:/admin/user";
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService, UserValidator userValidator, PasswordEncoder passwordEncoder) {
@@ -52,15 +49,24 @@ public class AdminController {
     @GetMapping("/new")
     public String addUser(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("roles", roleService.getRoles());
         return "admin/newUserForm";
     }
 
     @PostMapping("/new")
-    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @RequestParam("roles") Set<Role> checked ) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return "admin/newUserForm";
         }
+        Set<Role> set = new HashSet<>();
+        String rol;
+
+        for (Role role : checked) {
+          rol = role.getName();
+          set.add(roleService.getRoleByName(rol).orElse(null));
+        }
+        user.setRoles(set);
         userService.addUser(user);
         return REDIRECT_ADMIN;
     }
@@ -76,7 +82,7 @@ public class AdminController {
     }
 
     @PostMapping("/edit")
-    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "id") Long id, @RequestParam("roles") List<Role> checked) {
+    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "id") Long id, @RequestParam("roles") Set<Role> checked) {
         Optional<User> optUser = userService.getUserById(user.getId());
         if (optUser.isPresent() && (!user.getEmail().equals(optUser.get().getEmail()))) {
             userValidator.validate(user, bindingResult);
@@ -88,9 +94,14 @@ public class AdminController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
+        Set<Role> set = new HashSet<>();
+        String rol;
+
         for (Role role : checked) {
-           user.getRoles().add(role);
+            rol = role.getName();
+            set.add(roleService.getRoleByName(rol).orElse(null));
         }
+        user.setRoles(set);
 
         userService.updateUser(user);
         return REDIRECT_ADMIN;

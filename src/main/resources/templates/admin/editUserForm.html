@@ -48,7 +48,7 @@
             <input type="checkbox" name="roles"
                    th:each="role : ${roles}"
                    th:text="${role.name}"
-                   th:value="${role.id}"
+                   th:value="${role.name}"
                    th:field="*{roles}"
             >
         </label>
@@ -58,6 +58,6 @@
     <input class="button1" type="submit" value="Редактировать">
 </form>
 <br>
-<a class="button1" href="/">На Главную</a>
+<a class="button1" href="/index">На Главную</a>
 </body>
 </html>

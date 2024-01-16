@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +26,8 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public boolean addUser(User user) {
-        if (!userDao.getUsers().isEmpty()) {
-        user.setRoles(Collections.singleton(new Role("ROLE_USER")));}
+//        if (!userDao.getUsers().isEmpty()) {
+//        user.setRoles(Collections.singleton(new Role("ROLE_USER")));}
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.addUser(user);
         return true;
