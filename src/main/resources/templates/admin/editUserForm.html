@@ -43,16 +43,13 @@
     <input type="text" th:field="*{password}" id="password">
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     <br>
-    <p >
-        <label>Roles:
-            <input type="checkbox" name="roles"
-                   th:each="role : ${roles}"
-                   th:text="${role.name}"
-                   th:value="${role.name}"
-                   th:field="*{roles}"
-            >
-        </label>
-    </p>
+    <br>
+    <select multiple required th:field="*{roles}">
+        <option th:each="role : ${roles}"
+                th:text="${role.name}"
+                th:value="${role.name}">
+        </option>
+    </select>
     <br>
     <br>
     <input class="button1" type="submit" value="Редактировать">

@@ -7,12 +7,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.Optional;
 
 @Controller
@@ -30,6 +32,7 @@ public class MainController {
     @GetMapping("/index")
     public String main(Model model, Principal principal) {
         if(Optional.ofNullable(principal).isPresent()) {
+            //здесь не обработала, т.к. не может быть пустого значения
         model.addAttribute("user", userService.findByEmail(principal.getName()).get().getFirstName());
         }
         return "index";
@@ -47,6 +50,7 @@ public class MainController {
         if(bindingResult.hasErrors()) {
             return "registration";
         }
+        user.setRoles(Collections.singleton(new Role("ROLE_USER")));
         userService.addUser(user);
         return REDIRECT;
     }

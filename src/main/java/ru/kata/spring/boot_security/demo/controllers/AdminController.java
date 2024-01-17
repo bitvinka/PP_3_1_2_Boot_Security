@@ -13,9 +13,9 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/user")
@@ -42,6 +42,7 @@ public class AdminController {
 
     @GetMapping("/showUser")
     public String showUser(@RequestParam(value = "id") Long id, Model model){
+        //здесь не может быть пустого значения
        model.addAttribute("user", userService.getUserById(id).get());
         return "admin/userAdmin";
     }
@@ -54,18 +55,16 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @RequestParam("roles") Set<Role> checked ) {
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,  @RequestParam("roles")  Set<Role> checked, Model model ) {
+        model.addAttribute("roles", roleService.getRoles());
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return "admin/newUserForm";
         }
-        Set<Role> set = new HashSet<>();
-        String rol;
-
-        for (Role role : checked) {
-          rol = role.getName();
-          set.add(roleService.getRoleByName(rol).orElse(null));
-        }
+        Set<Role> set = checked.stream()
+                .map(Role::getName)
+                .flatMap(name -> roleService.getRoleByName(name).stream())
+                .collect(Collectors.toSet());
         user.setRoles(set);
         userService.addUser(user);
         return REDIRECT_ADMIN;
@@ -82,25 +81,23 @@ public class AdminController {
     }
 
     @PostMapping("/edit")
-    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam(value = "id") Long id, @RequestParam("roles") Set<Role> checked) {
+    public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam("roles") Set<Role> checked, Model model) {
+        model.addAttribute("roles", roleService.getRoles());
         Optional<User> optUser = userService.getUserById(user.getId());
         if (optUser.isPresent() && (!user.getEmail().equals(optUser.get().getEmail()))) {
             userValidator.validate(user, bindingResult);
         }
         if (bindingResult.hasErrors()) {
-            return "admin/editUserForm";
+            return "/admin/editUserForm";
         }
         if (optUser.isPresent() && (!user.getPassword().equals(optUser.get().getPassword()))) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        Set<Role> set = new HashSet<>();
-        String rol;
-
-        for (Role role : checked) {
-            rol = role.getName();
-            set.add(roleService.getRoleByName(rol).orElse(null));
-        }
+        Set<Role> set = checked.stream()
+                .map(Role::getName)
+                .flatMap(name -> roleService.getRoleByName(name).stream())
+                .collect(Collectors.toSet());
         user.setRoles(set);
 
         userService.updateUser(user);

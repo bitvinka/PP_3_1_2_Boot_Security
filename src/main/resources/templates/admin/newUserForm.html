@@ -26,17 +26,15 @@
     <input type="text" th:field="*{password}" id="password">
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     <br>
-    <p >
-
-        <select name="multiSelectElementsSelected"
-                multiple="multiple"
-                th:field="*{roles}">
-
-            <option th:each="role : ${roles}"
-                    th:value="${role.getName()}"
-                    th:text="${role.getName()}"></option>
-        </select>
-    </p>
+    <br>
+    <select multiple required th:field="*{roles}">
+        <option th:each="role : ${roles}"
+                th:text="${role.name}"
+                th:value="${role.name}">
+        </option>
+    </select>
+    <br>
+    <br>
     <input type="submit" value="Добавить">
 </form>
 <br>
