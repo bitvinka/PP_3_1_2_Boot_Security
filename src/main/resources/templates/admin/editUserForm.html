@@ -34,17 +34,18 @@
     <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
     <br>
     <br>
-    <label for="email">Введите почту: </label>
-    <input type="email" th:field="*{email}" id="email">
-    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <label for="userName">Введите логин: </label>
+    <input type="text" th:field="*{userName}" id="userName">
+    <div style="color:red" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></div>
     <br>
     <br>
-    <label for="lastName">Введите пароль: </label>
+    <label for="password">Введите пароль: </label>
     <input type="text" th:field="*{password}" id="password">
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     <br>
     <br>
-    <select multiple required th:field="*{roles}">
+    <label for="roles">Роли:</label>
+    <select multiple required th:field="*{roles}" id="roles">
         <option th:each="role : ${roles}"
                 th:text="${role.name}"
                 th:value="${role.name}">

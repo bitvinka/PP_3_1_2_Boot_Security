@@ -111,7 +111,7 @@
         <td ><a th:href="@{/admin/user/showUser(id=${user.getId()})}" th:text="${user.getId()}"></a></td>
         <td th:text="${user.getFirstName()}"></td>
         <td th:text="${user.getLastName()}"></td>
-        <td th:text="${user.getEmail()}"></td>
+        <td th:text="${user.getUserName()}"></td>
         <td >
             <ul th:each ="role : ${user.getRoles()}" >
                 <li th:text="${role.getName()}"></li>

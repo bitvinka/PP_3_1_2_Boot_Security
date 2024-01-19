@@ -17,9 +17,9 @@
     <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
     <br>
     <br>
-    <label for="email">Введите почту: </label>
-    <input type="text" th:field="*{email}" id="email">
-    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <label for="userName">Введите логин: </label>
+    <input type="text" th:field="*{userName}" id="userName">
+    <div style="color:red" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></div>
     <br>
     <br>
     <label for="lastName">Введите пароль: </label>

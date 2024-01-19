@@ -84,7 +84,7 @@ public class AdminController {
     public String editUserForm(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult, @RequestParam("roles") Set<Role> checked, Model model) {
         model.addAttribute("roles", roleService.getRoles());
         Optional<User> optUser = userService.getUserById(user.getId());
-        if (optUser.isPresent() && (!user.getEmail().equals(optUser.get().getEmail()))) {
+        if (optUser.isPresent() && (!user.getUserName().equals(optUser.get().getUserName()))) {
             userValidator.validate(user, bindingResult);
         }
         if (bindingResult.hasErrors()) {

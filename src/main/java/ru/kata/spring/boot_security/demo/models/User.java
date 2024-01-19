@@ -5,8 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Objects;
@@ -22,18 +22,19 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Имя не может быть пустым")
     @Size(min = 2, max = 20, message = "Имя должно быть в диапазоне от 2 до 20 символов")
-    @Column(name = "firstName", length = 20, nullable = false, columnDefinition = "text")
+    @Column(name = "first_name", length = 20, nullable = false, columnDefinition = "text")
+    @Pattern(regexp = "\\p{L}+", message = "Имя должно состоять только из букв")
     private String firstName;
 
     @NotEmpty(message = "Фамилия не может быть пустой")
     @Size(min = 2, max = 30, message = "Фамилия должна быть в диапазоне от 2 до 30 символов")
-    @Column(name = "lastName", length = 30, nullable = false, columnDefinition = "text")
+    @Column(name = "last_name", length = 30, nullable = false, columnDefinition = "text")
+    @Pattern(regexp = "\\p{L}+", message = "Фамилия должна состоять только из букв")
     private String lastName;
 
     @NotEmpty(message = "Поле не может быть пустым")
-    @Email(message = "Вы ввели не корректный email")
-    @Column(name = "email", length = 40, nullable = false, unique = true, columnDefinition = "text")
-    private String email;
+    @Column(name = "user_name", length = 40, nullable = false, unique = true, columnDefinition = "text")
+    private String userName;
 
     @NotEmpty(message = "Пароль не может быть пустым")
     @Column(name = "password")
@@ -51,17 +52,10 @@ public class User implements UserDetails {
     }
 
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String userName, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(String firstName, String lastName, String email, String password, Set<Role> roles) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+        this.userName = userName;
         this.password = password;
         this.roles = roles;
     }
@@ -90,14 +84,15 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -120,7 +115,7 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                ", email='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
@@ -130,14 +125,13 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password);
+        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password);
+        return Objects.hash(id, firstName, lastName, password);
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -146,7 +140,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return userName;
     }
 
     @Override

@@ -25,11 +25,11 @@ public class DataLoader implements ApplicationRunner {
         if (userService.getUsers().isEmpty()) {
             Set<Role> set1 = new HashSet<>();
             set1.add(new Role("ROLE_ADMIN"));
-            userService.addUser(new User("Иван", "Иванов", "admin@m", "admin", set1));
+            userService.addUser(new User("Иван", "Иванов", "admin", "admin", set1));
 
             Set<Role> set2 = new HashSet<>();
             set2.add(new Role("ROLE_USER"));
-            userService.addUser(new User("Петр", "Петров", "user@m", "user", set2));
+            userService.addUser(new User("Петр", "Петров", "user", "user", set2));
         }
     }
 }

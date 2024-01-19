@@ -47,9 +47,9 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return em.createQuery("select u from users u JOIN FETCH u.roles where u.email =:userEmail", User.class)
-                .setParameter("userEmail", email)
+    public Optional<User> findByUserName(String userName) {
+        return em.createQuery("select u from users u JOIN FETCH u.roles where u.userName =:userName", User.class)
+                .setParameter("userName", userName)
                 .getResultList()
                 .stream()
                 .findFirst();

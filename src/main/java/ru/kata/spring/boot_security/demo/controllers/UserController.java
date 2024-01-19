@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/user")
     public String getUser(Model model, Principal principal) {
-        Optional<User> user = userService.findByEmail(principal.getName());
+        Optional<User> user = userService.findByUserName(principal.getName());
         if (user.isEmpty()) {
             return "registration";
         }

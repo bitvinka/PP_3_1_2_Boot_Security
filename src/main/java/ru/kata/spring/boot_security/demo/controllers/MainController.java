@@ -33,7 +33,7 @@ public class MainController {
     public String main(Model model, Principal principal) {
         if(Optional.ofNullable(principal).isPresent()) {
             //здесь не обработала, т.к. не может быть пустого значения
-        model.addAttribute("user", userService.findByEmail(principal.getName()).get().getFirstName());
+        model.addAttribute("user", userService.findByUserName(principal.getName()).get().getFirstName());
         }
         return "index";
 
